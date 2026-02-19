@@ -63,11 +63,20 @@ class SportsPersonnelService {
 
   // -------------------------------------
 
-  public async delete(id: number) {}
+  public async delete(id: number) {
+    await prisma.spSportsPersonnel.delete({ where: { id } });
+    return;
+  }
 
   // -------------------------------------
 
-  public async toggleActive({ id, active }: { id: number; active: boolean }) {}
+  public async toggleActive({ id, active }: { id: number; active: boolean }) {
+    const data = await prisma.spSportsPersonnel.update({
+      where: { id },
+      data: { isActive: active },
+    });
+    return data;
+  }
 }
 
 export const sportsPersonnelService: SportsPersonnelService =

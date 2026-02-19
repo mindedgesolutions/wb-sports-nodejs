@@ -36,11 +36,25 @@ class SportsPersonnelController {
 
   // -------------------------------------
 
-  public async delete(req: Request, res: Response) {}
+  public async delete(req: Request, res: Response) {
+    const data = await sportsPersonnelService.delete(Number(req.params.id));
+
+    return res.status(StatusCodes.OK).json({ message: 'success', data });
+  }
 
   // -------------------------------------
 
-  public async toggleActive(req: Request, res: Response) {}
+  public async toggleActive(req: Request, res: Response) {
+    const { id } = req.params;
+    const { checked } = req.body;
+    console.log(checked);
+    const data = await sportsPersonnelService.toggleActive({
+      id: Number(id),
+      active: checked as boolean,
+    });
+
+    return res.status(StatusCodes.OK).json({ message: 'success', data });
+  }
 }
 
 export const sportsPersonnelController: SportsPersonnelController =

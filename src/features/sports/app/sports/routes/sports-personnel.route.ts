@@ -5,11 +5,8 @@ const sportsPersonnelRoute = express.Router();
 
 sportsPersonnelRoute.post('/', sportsPersonnelController.add);
 sportsPersonnelRoute.get('/', sportsPersonnelController.getAll);
+sportsPersonnelRoute.put('/toggle/:id', sportsPersonnelController.toggleActive);
 sportsPersonnelRoute.put('/:id', sportsPersonnelController.update);
 sportsPersonnelRoute.delete('/:id', sportsPersonnelController.delete);
-sportsPersonnelRoute.put(
-  '/:id/toggle-active',
-  sportsPersonnelController.toggleActive,
-);
 
 export default sportsPersonnelRoute;
