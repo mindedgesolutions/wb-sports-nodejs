@@ -1,0 +1,78 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Users {
+  id                Int          @id     @default(autoincrement())
+  name              String
+  email             String       @unique
+  mobile            String?
+  password          String
+  department        Department   @default(sports)
+  profileImg        String?
+  createdAt         DateTime     @default(now())
+  updatedAt         DateTime     @updatedAt
+  sessions          UserSessions[]
+}
+
+model UserSessions {
+  id                Int          @id     @default(autoincrement())
+  user              Users        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId            Int
+  refreshToken      String
+  createdAt         DateTime     @default(now())
+  updatedAt         DateTime     @updatedAt
+}
+
+model SpAdminStructure{
+  id                Int          @id            @default(autoincrement())
+  name              String
+  show              Int          @db.SmallInt    @default(0)
+  isActive          Boolean      @default(true)
+}
+
+model SpKeyPersonnel{
+  id                Int          @id     @default(autoincrement())
+  name              String
+  rank              String?
+  designation       String
+  img               String?
+  isActive          Boolean      @default(true)
+}
+
+model SpAchievements{
+  id                Int          @id     @default(autoincrement())
+  title             String
+  description       String?
+  achievementDate   DateTime?
+  isActive          Boolean      @default(true)
+  createdAt         DateTime     @default(now())
+  updatedAt         DateTime     @updatedAt
+}
+
+model SpSportsPersonnel{
+  id                Int          @id     @default(autoincrement())
+  sport             String       @db.VarChar(255)
+  name              String       @db.VarChar(255)
+  address           String?
+  dob               DateTime?    @db.Date
+  contactOne        String?      @db.VarChar(20)
+  contactTwo        String?      @db.VarChar(20)
+  isActive          Boolean      @default(true)
+}
+
+enum Department{
+  sports
+  services
+}

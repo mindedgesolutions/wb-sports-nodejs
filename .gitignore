@@ -1,0 +1,58 @@
+# --------------------
+# Node
+# --------------------
+node_modules/
+
+# --------------------
+# Build output
+# --------------------
+build/
+dist/
+out/
+
+# --------------------
+# Logs
+# --------------------
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+*.log
+
+# --------------------
+# Environment variables
+# --------------------
+# .env
+# .env.*
+# !.env.example
+
+# --------------------
+# OS / Editor
+# --------------------
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# --------------------
+# Prisma
+# --------------------
+# Ignore migrations ONLY if you regenerate them elsewhere
+# (Most apps should KEEP migrations committed)
+# prisma/migrations/
+
+# Prisma engines cache (safe to ignore)
+.prisma/
+
+# --------------------
+# Test / coverage
+# --------------------
+coverage/
+
+# --------------------
+# Temporary files
+# --------------------
+*.tmp
+*.swp
+
+/src/generated/prisma

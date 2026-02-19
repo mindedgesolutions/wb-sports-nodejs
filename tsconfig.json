@@ -1,0 +1,41 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "es2023",
+    "types": ["node"],
+    "lib": ["DOM", "ES2023"],
+    "baseUrl": ".",
+    "outDir": "./build",
+    "rootDir": "./src",
+    "strict": true,
+    "noImplicitAny": true,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "sourceMap": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "forceConsistentCasingInFileNames": true,
+    "allowSyntheticDefaultImports": true,
+    "pretty": true,
+    "resolveJsonModule": true,
+    "paths": {
+      "@/*": ["./src/*"],
+      "@/constants/*": ["./src/globals/constants/*"],
+      "@/helpers/*": ["./src/globals/helpers/*"],
+      "@/routes/*": ["./src/globals/routes/*"],
+      "@/core/*": ["./src/globals/core/*"],
+      "@/auth/*": ["./src/features/auth/*"],
+      "@/user/*": ["./src/features/user/*"],
+      "@/job/*": ["./src/features/job/*"],
+      "@/candidate/*": ["./src/features/candidate-profile/*"],
+      "@/company/*": ["./src/features/company/*"],
+      "@/apply/*": ["./src/features/apply/*"],
+      "@/uploads/*": ["./uploads/*"]
+    }
+  },
+  "files": ["src/types.d.ts"],
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "build"]
+}
