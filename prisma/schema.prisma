@@ -15,10 +15,10 @@ datasource db {
 
 model Users {
   id                Int          @id     @default(autoincrement())
-  name              String
+  name              String       @db.VarChar(255)
   email             String       @unique
-  mobile            String?
-  password          String
+  mobile            String?      @db.VarChar(20)
+  password          String       @db.VarChar(255)
   department        Department   @default(sports)
   profileImg        String?
   createdAt         DateTime     @default(now())
@@ -37,18 +37,21 @@ model UserSessions {
 
 model SpAdminStructure{
   id                Int          @id            @default(autoincrement())
-  name              String
+  name              String       @db.VarChar(255)
+  slug              String?      @db.VarChar(255)
   show              Int          @db.SmallInt    @default(0)
   isActive          Boolean      @default(true)
 }
 
 model SpKeyPersonnel{
   id                Int          @id     @default(autoincrement())
-  name              String
-  rank              String?
-  designation       String
+  name              String       @db.VarChar(255)
+  slug              String?      @db.VarChar(255)
+  rank              String?      @db.VarChar(255)
+  designation       String       @db.VarChar(255)
   img               String?
   isActive          Boolean      @default(true)
+  show              Int          @db.SmallInt    @default(0)
 }
 
 model SpAchievements{
@@ -65,6 +68,7 @@ model SpSportsPersonnel{
   id                Int          @id     @default(autoincrement())
   sport             String       @db.VarChar(255)
   name              String       @db.VarChar(255)
+  slug              String?      @db.VarChar(255)
   address           String?
   dob               DateTime?    @db.Date
   contactOne        String?      @db.VarChar(20)

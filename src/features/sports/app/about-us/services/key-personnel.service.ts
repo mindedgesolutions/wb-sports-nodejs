@@ -1,44 +1,101 @@
 import { getPaginationAndFilters } from '@/globals/helpers/simple.pagination.helper';
-import { KeyPersonnelDTO } from '../interfaces';
+import { KeyPersonnelDTO, KeyPersonnelShowOrderDTO } from '../interfaces';
 import { prisma } from '@/prisma';
 import { ROOT_PATH } from '@/globals/constants';
 import fs from 'fs/promises';
 import path from 'path';
+import generateSlug from '@/globals/helpers/slug.helper';
+import { BadRequestException } from '@/globals/core/error.core';
 
 class KeyPersonnelService {
-  public async create(requestBody: KeyPersonnelDTO, file: Express.Multer.File) {
+  public async checkExist(value: string, id?: number) {
+    const slug = generateSlug(value);
+    let isExist = null;
+    if (id) {
+      isExist = await prisma.spKeyPersonnel.findFirst({
+        where: { slug, NOT: { id } },
+        select: { id: true },
+      });
+    } else {
+      isExist = await prisma.spKeyPersonnel.findFirst({
+        where: { slug },
+        select: { id: true },
+      });
+    }
+    return !!isExist;
+  }
+
+  // ----------------------
+
+  public async create(
+    requestBody: KeyPersonnelDTO,
+    file: Express.Multer.File | null,
+  ) {
     const { name, rank, designation } = requestBody;
-    const relative = file.path.replace(ROOT_PATH, '');
-    const normalized = relative.split(path.sep).join(path.posix.sep);
+    const value = name + '-' + designation;
+
+    const isExist = await this.checkExist(value);
+    if (isExist)
+      throw new BadRequestException(
+        'Key personnel with similar name and designation already exists.',
+      );
+
+    const relative = file?.path.replace(ROOT_PATH, '');
+    const normalized = relative
+      ? relative.split(path.sep).join(path.posix.sep)
+      : null;
 
     try {
       const data = await prisma.$transaction(async (tx) => {
         await tx.spKeyPersonnel.create({
-          data: { name, rank: rank || '', designation, img: normalized },
+          data: {
+            name,
+            rank: rank || '',
+            designation,
+            img: normalized,
+            slug: generateSlug(value),
+          },
         });
       });
       return data;
     } catch (error) {
       if (file?.path) {
         await fs.unlink(file.path).catch(() => {});
-        return;
       }
+      throw error;
     }
   }
 
   // ----------------------
 
-  public async getAll({ page, search }: { page: number; search?: string }) {
+  public async getPaginated({
+    page,
+    search,
+  }: {
+    page: number;
+    search?: string;
+  }) {
     const { data, meta } = await getPaginationAndFilters({
       page,
       quickFilter: search,
       quickFilterFields: ['name', 'designation', 'rank'],
       baseWhere: {},
       model: 'spKeyPersonnel',
-      sortBy: [{ id: 'desc' }],
+      sortBy: [{ show: 'asc' }, { id: 'desc' }],
     });
 
     return { data, meta };
+  }
+
+  // ----------------------
+
+  public async getAll() {
+    const data = await prisma.spKeyPersonnel.findMany({
+      select: { id: true, name: true, designation: true, img: true },
+      orderBy: [{ show: 'asc' }, { id: 'desc' }],
+    });
+
+    return { data };
   }
 
   // ----------------------
@@ -53,6 +110,15 @@ class KeyPersonnelService {
     file?: Express.Multer.File;
   }) {
     const { name, rank, designation } = requestBody;
+
+    const value = name + '-' + designation;
+
+    const isExist = await this.checkExist(value, id);
+    if (isExist)
+      throw new BadRequestException(
+        'Key personnel with similar name and designation already exists.',
+      );
+
     let normalized = '';
 
     if (file) {
@@ -74,6 +140,7 @@ class KeyPersonnelService {
         rank: rank || '',
         designation,
         ...(file && { img: normalized }),
+        slug: generateSlug(value),
       },
     });
 
@@ -106,6 +173,22 @@ class KeyPersonnelService {
       data: { isActive: active },
     });
     return;
+  }
+
+  // ----------------------
+
+  public async sortShowOrder(requestBody: KeyPersonnelShowOrderDTO[]) {
+    const data = await prisma.$transaction(async (tx) => {
+      await Promise.all(
+        requestBody.map((item: KeyPersonnelShowOrderDTO) =>
+          tx.spKeyPersonnel.update({
+            where: { id: item.id },
+            data: { show: item.show },
+          }),
+        ),
+      );
+    });
+    return data;
   }
 }
 

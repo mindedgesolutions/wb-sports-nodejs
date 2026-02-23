@@ -14,12 +14,20 @@ class AdminStructureController {
 
   // ----------------------
 
-  public async getAll(req: Request, res: Response) {
+  public async getPaginated(req: Request, res: Response) {
     const { page, search } = req.query;
-    const data = await adminStructureService.getAll({
+    const data = await adminStructureService.getPaginated({
       page: Number(page) || 1,
       search: search as string,
     });
+
+    return res.status(StatusCodes.OK).json({ message: 'Success', data });
+  }
+
+  // ----------------------
+
+  public async getAll(req: Request, res: Response) {
+    const data = await adminStructureService.getAll();
 
     return res.status(StatusCodes.OK).json({ message: 'Success', data });
   }

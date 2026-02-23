@@ -25,3 +25,10 @@ export interface KeyPersonnelDTO {
   designation: string;
   img: string | null;
 }
+
+// ----------------------
+
+export interface KeyPersonnelShowOrderDTO {
+  id: number;
+  show: number;
+}

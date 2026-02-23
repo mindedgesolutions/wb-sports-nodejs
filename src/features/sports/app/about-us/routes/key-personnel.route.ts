@@ -13,7 +13,6 @@ const uploadKeyPersonnel = uploadSingle({
   fileSize: 2 * 1024 * 1024,
   allowedTypes: ['image/jpeg', 'image/png'],
   fileName: (req, file) => {
-    console.log(`File name: ${file.originalname}`);
     return `${Date.now()}${path.extname(file.originalname)}`;
   },
 });
@@ -24,7 +23,9 @@ keyPersonnelRoute.post(
   uploadKeyPersonnel.single('newImg'),
   keyPersonnelController.create,
 );
-keyPersonnelRoute.get('/', keyPersonnelController.getAll);
+keyPersonnelRoute.get('/', keyPersonnelController.getPaginated);
+keyPersonnelRoute.get('/all', keyPersonnelController.getAll);
+keyPersonnelRoute.put('/sort', keyPersonnelController.sortShowOrder);
 keyPersonnelRoute.put(
   '/:id',
   validateSchema(keyPersonnelSchema),

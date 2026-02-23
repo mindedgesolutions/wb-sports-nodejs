@@ -10,7 +10,8 @@ adminStructureRoute.post(
   validateSchema(adminStructureSchema),
   adminStructureController.create,
 );
-adminStructureRoute.get('/', adminStructureController.getAll);
+adminStructureRoute.get('/', adminStructureController.getPaginated);
+adminStructureRoute.get('/all', adminStructureController.getAll);
 adminStructureRoute.put('/sort', adminStructureController.sortShowOrder);
 adminStructureRoute.put(
   '/:id',

@@ -1,13 +1,40 @@
 import { prisma } from '@/prisma';
 import { AdminStructureDTO, AdminStructureShowOrderDTO } from '../interfaces';
 import { getPaginationAndFilters } from '@/globals/helpers/simple.pagination.helper';
+import generateSlug from '@/globals/helpers/slug.helper';
+import { BadRequestException } from '@/globals/core/error.core';
 
 class AdminStructureService {
+  public async checkExist(value: string, id?: number) {
+    const slug = generateSlug(value);
+    let isExist = null;
+    if (id) {
+      isExist = await prisma.spAdminStructure.findFirst({
+        where: { slug, NOT: { id } },
+        select: { id: true },
+      });
+    } else {
+      isExist = await prisma.spAdminStructure.findFirst({
+        where: { slug },
+        select: { id: true },
+      });
+    }
+    return !!isExist;
+  }
+
+  // ----------------------
+
   public async create(requestBody: AdminStructureDTO) {
     const { name } = requestBody;
 
+    const isExist = await this.checkExist(name);
+    if (isExist)
+      throw new BadRequestException(
+        'Admin structure with this name already exists',
+      );
+
     const data = await prisma.spAdminStructure.create({
-      data: { name },
+      data: { name, slug: generateSlug(name) },
     });
 
     return data;
@@ -15,7 +42,13 @@ class AdminStructureService {
 
   // ----------------------
 
-  public async getAll({ page, search }: { page: number; search?: string }) {
+  public async getPaginated({
+    page,
+    search,
+  }: {
+    page: number;
+    search?: string;
+  }) {
     const { data, meta } = await getPaginationAndFilters({
       page,
       quickFilter: search,
@@ -30,6 +63,15 @@ class AdminStructureService {
 
   // ----------------------
 
+  public async getAll() {
+    const data = await prisma.spAdminStructure.findMany({
+      orderBy: [{ show: 'asc' }, { id: 'desc' }],
+    });
+    return data;
+  }
+
+  // ----------------------
+
   public async update({
     id,
     requestBody,
@@ -38,9 +80,16 @@ class AdminStructureService {
     requestBody: AdminStructureDTO;
   }) {
     const { name } = requestBody;
+
+    const isExist = await this.checkExist(name, id);
+    if (isExist)
+      throw new BadRequestException(
+        'Admin structure with this name already exists',
+      );
+
     const data = await prisma.spAdminStructure.update({
       where: { id },
-      data: { name },
+      data: { name, slug: generateSlug(name) },
     });
 
     return data;
