@@ -47,7 +47,6 @@ class SportsPersonnelController {
   public async toggleActive(req: Request, res: Response) {
     const { id } = req.params;
     const { checked } = req.body;
-    console.log(checked);
     const data = await sportsPersonnelService.toggleActive({
       id: Number(id),
       active: checked as boolean,

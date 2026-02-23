@@ -1,8 +1,9 @@
 import { getPaginationAndFilters } from '@/globals/helpers/simple.pagination.helper';
 import { prisma } from '@/prisma';
+import { SportsPersonnelDTO } from '../interfaces';
 
 class SportsPersonnelService {
-  public async add(requestBody: any) {
+  public async add(requestBody: SportsPersonnelDTO) {
     const { sport, name, address, dob, contactOne, contactTwo } = requestBody;
     const formattedDate = dob ? new Date(dob) : null;
 
@@ -42,7 +43,13 @@ class SportsPersonnelService {
 
   // -------------------------------------
 
-  public async update({ id, requestBody }: { id: number; requestBody: any }) {
+  public async update({
+    id,
+    requestBody,
+  }: {
+    id: number;
+    requestBody: SportsPersonnelDTO;
+  }) {
     const { sport, name, address, dob, contactOne, contactTwo } = requestBody;
     const formattedDate = dob ? new Date(dob) : null;
 

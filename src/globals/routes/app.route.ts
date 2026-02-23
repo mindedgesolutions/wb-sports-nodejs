@@ -7,6 +7,7 @@ import express from 'express';
 import { ROOT_PATH } from '../constants';
 import path from 'path';
 import sportsPersonnelRoute from '@/features/sports/app/sports/routes/sports-personnel.route';
+import sportsEventsRoute from '@/features/sports/app/sports/routes/sports-events.route';
 
 function appRoutes(app: Application) {
   app.use('/api/v1/auth', authRoute);
@@ -14,6 +15,7 @@ function appRoutes(app: Application) {
   app.use('/api/v1/sports/about-us/admin-structure', adminStructureRoute);
   app.use('/api/v1/sports/about-us/key-personnel', keyPersonnelRoute);
   app.use('/api/v1/sports/sports/sports-personnel', sportsPersonnelRoute);
+  app.use('/api/v1/sports/sports/sports-events', sportsEventsRoute);
 
   app.use('/uploads', express.static(path.join(ROOT_PATH, 'uploads')));
 }
