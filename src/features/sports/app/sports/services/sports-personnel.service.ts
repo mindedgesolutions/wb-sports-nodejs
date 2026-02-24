@@ -1,11 +1,12 @@
 import { getPaginationAndFilters } from '@/globals/helpers/simple.pagination.helper';
 import { prisma } from '@/prisma';
 import { SportsPersonnelDTO } from '../interfaces';
+import { validDate } from '@/globals/helpers/formats.helper';
 
 class SportsPersonnelService {
   public async add(requestBody: SportsPersonnelDTO) {
     const { sport, name, address, dob, contactOne, contactTwo } = requestBody;
-    const formattedDate = dob ? new Date(dob) : null;
+    const formattedDate = dob ? validDate(dob) : null;
 
     const data = await prisma.spSportsPersonnel.create({
       data: {
@@ -51,7 +52,7 @@ class SportsPersonnelService {
     requestBody: SportsPersonnelDTO;
   }) {
     const { sport, name, address, dob, contactOne, contactTwo } = requestBody;
-    const formattedDate = dob ? new Date(dob) : null;
+    const formattedDate = dob ? validDate(dob) : null;
 
     const data = await prisma.spSportsPersonnel.update({
       where: { id },

@@ -1,11 +1,12 @@
 import { prisma } from '@/prisma';
 import { AchievementsDTO } from '../interfaces';
 import { getPaginationAndFilters } from '@/globals/helpers/simple.pagination.helper';
+import { validDate } from '@/globals/helpers/formats.helper';
 
 class AchievementsService {
   public async create(requestBody: AchievementsDTO) {
     const { title, description, achievementDate } = requestBody;
-    const formattedDate = achievementDate ? new Date(achievementDate) : null;
+    const formattedDate = achievementDate ? validDate(achievementDate) : null;
 
     const data = await prisma.spAchievements.create({
       data: { title, description, achievementDate: formattedDate },
@@ -39,7 +40,7 @@ class AchievementsService {
     requestBody: AchievementsDTO;
   }) {
     const { title, description, achievementDate } = requestBody;
-    const formattedDate = achievementDate ? new Date(achievementDate) : null;
+    const formattedDate = achievementDate ? validDate(achievementDate) : null;
 
     const data = await prisma.spAchievements.update({
       where: { id },

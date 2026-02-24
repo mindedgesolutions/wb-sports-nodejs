@@ -1,7 +1,7 @@
 export interface AchievementsDTO {
   title: string;
   description?: string;
-  achievementDate?: Date;
+  achievementDate?: string | null;
 }
 
 // ----------------------

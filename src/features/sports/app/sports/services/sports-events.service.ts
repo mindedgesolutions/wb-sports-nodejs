@@ -1,14 +1,15 @@
 import { prisma } from '@/prisma';
 import { SportsEventsDTO } from '../interfaces';
 import { getPaginationAndFilters } from '@/globals/helpers/simple.pagination.helper';
+import { validDate } from '@/globals/helpers/formats.helper';
 
 class SportsEventsService {
   public async add(requestBody: SportsEventsDTO) {
     const { title, startDate } = requestBody;
-    const formatted = startDate ? new Date(startDate) : null;
+    const formattedDate = startDate ? validDate(startDate) : null;
 
     const data = await prisma.spSportsEvents.create({
-      data: { title: title.trim(), startDate: formatted },
+      data: { title: title.trim(), startDate: formattedDate },
     });
 
     return data;
@@ -39,11 +40,14 @@ class SportsEventsService {
     requestBody: SportsEventsDTO;
   }) {
     const { title, startDate } = requestBody;
-    const formatted = startDate ? new Date(startDate) : null;
+    const formattedDate = startDate ? validDate(startDate) : null;
 
     const data = await prisma.spSportsEvents.update({
       where: { id },
-      data: { title: title.trim(), startDate: formatted },
+      data: {
+        title: title.trim(),
+        startDate: formattedDate,
+      },
     });
 
     return data;

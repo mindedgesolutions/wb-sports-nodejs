@@ -7,3 +7,15 @@ export const validNumber = (
   const pattern = /^[0-9]+$/;
   return str.length === length && pattern.test(str);
 };
+
+// -------------------------------------
+
+export const validDate = (value: string) => {
+  const local = new Date(value);
+  const yyyy = local.getFullYear();
+  const mm = String(local.getMonth() + 1).padStart(2, '0');
+  const dd = String(local.getDate()).padStart(2, '0');
+  const formatted = `${yyyy}-${mm}-${dd}`;
+
+  return new Date(formatted);
+};
