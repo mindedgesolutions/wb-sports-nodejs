@@ -44,7 +44,7 @@ model SpAdminStructure{
 }
 
 model SpKeyPersonnel{
-  id                Int          @id     @default(autoincrement())
+  id                Int          @id             @default(autoincrement())
   name              String       @db.VarChar(255)
   slug              String?      @db.VarChar(255)
   rank              String?      @db.VarChar(255)
@@ -85,7 +85,36 @@ model SpSportsEvents{
   updatedAt         DateTime     @updatedAt
 }
 
+model SpWbsCouncilDesignations {
+  id                Int          @id     @default(autoincrement())
+  boardType         BoardTypes   
+  name              String       @db.VarChar(255)
+  slug              String?      @db.VarChar(255)
+  isActive          Boolean      @default(true)
+  cDesignation      SpAdvisoryWoringCommittee[]
+}
+
+model SpAdvisoryWoringCommittee{
+  id                Int           @id     @default(autoincrement())
+  designationId     Int
+  cDesignation      SpWbsCouncilDesignations @relation(fields: [designationId], references: [id])   
+  name              String        @db.VarChar(255)
+  slug              String        @db.VarChar(255)
+  designation       String?       @db.VarChar(255)
+  address           String?       @db.VarChar(255)
+  phone             String?       @db.VarChar(20)
+  email             String?       @db.VarChar(255)
+  fax               String?       @db.VarChar(20)
+  img               String?
+  isActive          Boolean       @default(true)
+}
+
 enum Department{
   sports
   services
+}
+
+enum BoardTypes{
+  advisory_board     @map("advisory-board")
+  working_committee  @map("working-committee")
 }
