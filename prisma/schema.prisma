@@ -97,6 +97,7 @@ model SpWbsCouncilDesignations {
 
 model SpAdvisoryWoringCommittee{
   id                Int           @id     @default(autoincrement())
+  boardType         BoardTypes
   designationId     Int
   cDesignation      SpWbsCouncilDesignations @relation(fields: [designationId], references: [id])   
   name              String        @db.VarChar(255)

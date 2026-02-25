@@ -9,6 +9,7 @@ import path from 'path';
 import sportsPersonnelRoute from '@/features/sports/app/sports/routes/sports-personnel.route';
 import sportsEventsRoute from '@/features/sports/app/sports/routes/sports-events.route';
 import wbsCouncilDesignationsRoute from '@/features/sports/app/wbs-council-sports/routes/wbs-council-designations.route';
+import advisoryWorkingRoute from '@/features/sports/app/wbs-council-sports/routes/advisory-working.route';
 
 function appRoutes(app: Application) {
   app.use('/api/v1/auth', authRoute);
@@ -20,6 +21,10 @@ function appRoutes(app: Application) {
   app.use(
     '/api/v1/sports/wbs-council-designations',
     wbsCouncilDesignationsRoute,
+  );
+  app.use(
+    '/api/v1/sports/wbs-council-sports/advisory-working',
+    advisoryWorkingRoute,
   );
 
   app.use('/uploads', express.static(path.join(ROOT_PATH, 'uploads')));
