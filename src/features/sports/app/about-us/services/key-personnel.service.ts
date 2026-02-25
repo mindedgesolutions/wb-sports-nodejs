@@ -95,7 +95,7 @@ class KeyPersonnelService {
       orderBy: [{ show: 'asc' }, { id: 'desc' }],
     });
 
-    return { data };
+    return data;
   }
 
   // ----------------------

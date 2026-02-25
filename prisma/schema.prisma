@@ -90,6 +90,7 @@ model SpWbsCouncilDesignations {
   boardType         BoardTypes   
   name              String       @db.VarChar(255)
   slug              String?      @db.VarChar(255)
+  show              Int          @db.SmallInt    @default(0)
   isActive          Boolean      @default(true)
   cDesignation      SpAdvisoryWoringCommittee[]
 }
