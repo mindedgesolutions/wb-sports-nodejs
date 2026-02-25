@@ -1,7 +1,10 @@
 import { Request, Response } from 'express';
 import { wbsCouncilDesignationsService } from '../services/wbs-council-designations.service';
 import { StatusCodes } from 'http-status-codes';
-import { WbsCouncilDesignationsShowOrderDTO } from '../interfaces';
+import {
+  WbsCouncilDesignationsDTO,
+  WbsCouncilDesignationsShowOrderDTO,
+} from '../interfaces';
 
 class WbsCouncilDesignationsController {
   public async add(req: Request, res: Response) {
@@ -32,11 +35,22 @@ class WbsCouncilDesignationsController {
 
   // ---------------------------------
 
-  public async update(req: Request, res: Response) {}
+  public async update(req: Request, res: Response) {
+    const { id } = req.params;
+    const data = await wbsCouncilDesignationsService.update(
+      Number(id),
+      req.body as WbsCouncilDesignationsDTO,
+    );
+    return res.status(StatusCodes.OK).json({ message: 'Success', data });
+  }
 
   // ---------------------------------
 
-  public async delete(req: Request, res: Response) {}
+  public async delete(req: Request, res: Response) {
+    const { id } = req.params;
+    await wbsCouncilDesignationsService.delete(Number(id));
+    return res.status(StatusCodes.OK).json({ message: 'Success' });
+  }
 
   // ---------------------------------
 

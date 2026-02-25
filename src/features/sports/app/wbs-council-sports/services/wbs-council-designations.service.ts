@@ -75,7 +75,20 @@ class WbsCouncilDesignationsService {
 
   // ---------------------------------
 
-  public async update(id: number, requestBody: WbsCouncilDesignationsDTO) {}
+  public async update(id: number, requestBody: WbsCouncilDesignationsDTO) {
+    const { boardType, name } = requestBody;
+
+    const data = await prisma.spWbsCouncilDesignations.update({
+      where: { id },
+      data: {
+        boardType: boardType as BoardTypes,
+        name,
+        slug: generateSlug(name),
+      },
+    });
+
+    return data;
+  }
 
   // ---------------------------------
 
