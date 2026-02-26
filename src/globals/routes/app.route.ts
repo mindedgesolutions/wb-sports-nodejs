@@ -19,7 +19,7 @@ function appRoutes(app: Application) {
   app.use('/api/v1/sports/sports/sports-personnel', sportsPersonnelRoute);
   app.use('/api/v1/sports/sports/sports-events', sportsEventsRoute);
   app.use(
-    '/api/v1/sports/wbs-council-designations',
+    '/api/v1/sports/wbs-council-sports/designations',
     wbsCouncilDesignationsRoute,
   );
   app.use(

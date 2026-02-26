@@ -35,7 +35,7 @@ class KeyPersonnelController {
 
   public async update(req: Request, res: Response) {
     const { id } = req.params;
-    const file = req.file;
+    const file = req.file ?? null;
     const data = await keyPersonnelService.update({
       id: Number(id),
       requestBody: req.body,

@@ -10,6 +10,14 @@ export const validNumber = (
 
 // -------------------------------------
 
+export const validEmail = (value: string) => {
+  if (value === null || value === undefined || value === '') return true;
+  const pattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  return pattern.test(value);
+};
+
+// -------------------------------------
+
 export const validDate = (value: string) => {
   const local = new Date(value);
   const yyyy = local.getFullYear();

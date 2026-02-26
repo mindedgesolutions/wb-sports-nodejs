@@ -102,7 +102,7 @@ model SpAdvisoryWoringCommittee{
   cDesignation      SpWbsCouncilDesignations @relation(fields: [designationId], references: [id])   
   name              String        @db.VarChar(255)
   slug              String        @db.VarChar(255)
-  designation       String?       @db.VarChar(255)
+  designationLabel  String?       @db.VarChar(255)
   address           String?       @db.VarChar(255)
   phone             String?       @db.VarChar(20)
   email             String?       @db.VarChar(255)

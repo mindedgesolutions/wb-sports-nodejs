@@ -92,7 +92,11 @@ class WbsCouncilDesignationsService {
 
   // ---------------------------------
 
-  public async delete(id: number) {}
+  public async delete(id: number) {
+    await prisma.spWbsCouncilDesignations.delete({ where: { id } });
+
+    return;
+  }
 
   // ---------------------------------
 
