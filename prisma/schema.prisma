@@ -111,6 +111,21 @@ model SpAdvisoryWoringCommittee{
   isActive          Boolean       @default(true)
 }
 
+model SpAnnouncements {
+  id                Int          @id     @default(autoincrement())
+  type              AnnouncementTypes
+  annNo             String       @db.VarChar(255)
+  subject           String
+  isNew             Boolean      @default(true)
+  startDate         DateTime?    @db.Date
+  endDate           DateTime?    @db.Date
+  filePath          String
+  fileName          String
+  isActive          Boolean      @default(true)
+  createdAt         DateTime     @default(now())
+  updatedAt         DateTime     @updatedAt
+}
+
 enum Department{
   sports
   services
@@ -119,4 +134,10 @@ enum Department{
 enum BoardTypes{
   advisory_board     @map("advisory-board")
   working_committee  @map("working-committee")
+}
+
+enum AnnouncementTypes{
+  news
+  tender
+  circular
 }

@@ -5,7 +5,10 @@ import { StatusCodes } from 'http-status-codes';
 class AdvisoryWorkingController {
   public async add(req: Request, res: Response) {
     const file = req.file ?? null;
-    const data = await advisoryWorkingService.add(req.body, file);
+    const data = await advisoryWorkingService.add({
+      requestBody: req.body,
+      file,
+    });
 
     return res.status(StatusCodes.CREATED).json({ message: 'success', data });
   }
@@ -26,20 +29,36 @@ class AdvisoryWorkingController {
   public async update(req: Request, res: Response) {
     const { id } = req.params;
     const file = req.file ?? null;
-    const data = await advisoryWorkingService.update(Number(id), {
-      ...req.body,
+    const data = await advisoryWorkingService.update({
+      id: Number(id),
+      requestBody: req.body,
       file,
     });
+
     return res.status(StatusCodes.OK).json({ message: 'success', data });
   }
 
   // ----------------------------
 
-  public async delete(req: Request, res: Response) {}
+  public async delete(req: Request, res: Response) {
+    const { id } = req.params;
+    await advisoryWorkingService.delete(Number(id));
+    return res.status(StatusCodes.OK).json({ message: 'Success' });
+  }
 
   // ----------------------------
 
-  public async toggleActive(req: Request, res: Response) {}
+  public async toggleActive(req: Request, res: Response) {
+    const { id } = req.params;
+    const { checked } = req.body;
+
+    const data = await advisoryWorkingService.toggleActive({
+      id: Number(id),
+      active: checked as boolean,
+    });
+
+    return res.status(StatusCodes.OK).json({ message: `Success`, data });
+  }
 }
 
 export const advisoryWorkingController: AdvisoryWorkingController =

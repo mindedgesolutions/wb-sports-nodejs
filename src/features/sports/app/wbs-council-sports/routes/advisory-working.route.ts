@@ -27,6 +27,7 @@ advisoryWorkingRoute.get('/', advisoryWorkingController.getPaginated);
 advisoryWorkingRoute.put(
   '/:id',
   validateSchema(wbsCouncilMemberSchema),
+  uploadMemberImg.single('newImg'),
   advisoryWorkingController.update,
 );
 advisoryWorkingRoute.delete('/:id', advisoryWorkingController.delete);

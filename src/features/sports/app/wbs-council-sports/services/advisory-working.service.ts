@@ -29,10 +29,13 @@ class AdvisoryWorkingService {
 
   // ----------------------
 
-  public async add(
-    requestBody: WbsCouncilMemberDTO,
-    file: Express.Multer.File | null,
-  ) {
+  public async add({
+    requestBody,
+    file,
+  }: {
+    requestBody: WbsCouncilMemberDTO;
+    file: Express.Multer.File | null;
+  }) {
     const {
       boardType,
       designationId,
@@ -139,17 +142,20 @@ class AdvisoryWorkingService {
         { name: 'asc' },
       ],
     });
-
     return { data, meta };
   }
 
   // ----------------------------
 
-  public async update(
-    id: number,
-    requestBody: WbsCouncilMemberDTO,
-    file?: Express.Multer.File | null,
-  ) {
+  public async update({
+    id,
+    requestBody,
+    file,
+  }: {
+    id: number;
+    requestBody: WbsCouncilMemberDTO;
+    file: Express.Multer.File | null;
+  }) {
     const {
       boardType,
       designationId,
@@ -167,11 +173,12 @@ class AdvisoryWorkingService {
       throw new BadRequestException(
         'Member from same board and designation already exists',
       );
-
+    console.log(file);
     const relative = file?.path.replace(ROOT_PATH, '');
     const normalized = relative
       ? relative.split(path.sep).join(path.posix.sep)
       : null;
+    console.log(normalized);
 
     try {
       const data = await prisma.$transaction(async (tx) => {
@@ -202,11 +209,28 @@ class AdvisoryWorkingService {
 
   // ----------------------------
 
-  public async delete(id: number) {}
+  public async delete(id: number) {
+    const member = await prisma.spAdvisoryWoringCommittee.findFirst({
+      where: { id },
+      select: { img: true },
+    });
+    if (member?.img) {
+      const path = ROOT_PATH + member.img;
+      await fs.unlink(path).catch(() => {});
+    }
+    await prisma.spAdvisoryWoringCommittee.delete({ where: { id } });
+    return;
+  }
 
   // ----------------------------
 
-  public async toggleActive(id: number, active: boolean) {}
+  public async toggleActive({ id, active }: { id: number; active: boolean }) {
+    await prisma.spAdvisoryWoringCommittee.update({
+      where: { id },
+      data: { isActive: active },
+    });
+    return;
+  }
 }
 
 export const advisoryWorkingService: AdvisoryWorkingService =
