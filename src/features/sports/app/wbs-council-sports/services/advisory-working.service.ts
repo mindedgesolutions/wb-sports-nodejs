@@ -107,6 +107,11 @@ class AdvisoryWorkingService {
           { phone: { contains: search, mode: 'insensitive' } },
           { email: { contains: search, mode: 'insensitive' } },
           { fax: { contains: search, mode: 'insensitive' } },
+          {
+            cDesignation: {
+              name: { contains: search, mode: 'insensitive' },
+            },
+          },
           ...(enumMatches.length ? [{ boardType: { in: enumMatches } }] : []),
         ],
       };
@@ -121,9 +126,18 @@ class AdvisoryWorkingService {
 
     const data = await prisma.spAdvisoryWoringCommittee.findMany({
       where,
-      orderBy: [{ boardType: 'asc' }, { name: 'asc' }],
       skip: safeSkip,
       take: safeLimit,
+      include: {
+        cDesignation: {
+          select: { name: true },
+        },
+      },
+      orderBy: [
+        { boardType: 'asc' },
+        { cDesignation: { show: 'asc' } },
+        { name: 'asc' },
+      ],
     });
 
     return { data, meta };
