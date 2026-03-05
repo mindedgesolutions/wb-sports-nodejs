@@ -27,3 +27,27 @@ export const validDate = (value: string) => {
 
   return new Date(formatted);
 };
+
+// -------------------------------------
+
+export const fileSizes = () => {
+  const max1mb = 1024 * 1024;
+  const max2mb = 2 * max1mb;
+  const max5mb = 5 * max1mb;
+  const max10mb = 10 * max1mb;
+
+  return { max1mb, max2mb, max5mb, max10mb };
+};
+
+// -------------------------------------
+
+export const fileTypes = () => {
+  const imageTypes = ['image/jpeg', 'image/png', 'image/gif'];
+  const documentTypes = [
+    'application/pdf',
+    'application/msword',
+    'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+  ];
+
+  return { imageTypes, documentTypes };
+};

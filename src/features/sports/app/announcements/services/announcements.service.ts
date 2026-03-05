@@ -1,5 +1,6 @@
 import { AnnouncementTypes } from '@/generated/prisma/enums';
 import { SpAnnouncementsWhereInput } from '@/generated/prisma/models';
+import { validDate } from '@/globals/helpers/formats.helper';
 import { getMeta } from '@/globals/helpers/meta.helper';
 import { getPaginationAndFilters } from '@/globals/helpers/simple.pagination.helper';
 import { prisma } from '@/prisma';
@@ -11,7 +12,11 @@ class AnnouncementsService {
   }: {
     requestBody: any;
     file: Express.Multer.File;
-  }) {}
+  }) {
+    const { type, annNo, subject, isNew, startDate, endDate } = requestBody;
+    const formattedStartDate = startDate ? validDate(startDate) : null;
+    const formattedEndDate = endDate ? validDate(endDate) : null;
+  }
 
   // ------------------------
 

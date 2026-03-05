@@ -5,13 +5,14 @@ import { uploadSingle } from '@/globals/middlewares/upload.single';
 import path from 'path';
 import { ROOT_PATH } from '@/globals/constants';
 import { keyPersonnelSchema } from '../schemas';
+import { fileSizes, fileTypes } from '@/globals/helpers/formats.helper';
 
 const keyPersonnelRoute = express.Router();
 
 const uploadKeyPersonnel = uploadSingle({
   dest: path.join(ROOT_PATH, '/uploads/sports/key-personnel'),
-  fileSize: 2 * 1024 * 1024,
-  allowedTypes: ['image/jpeg', 'image/png'],
+  fileSize: fileSizes().max2mb,
+  allowedTypes: fileTypes().imageTypes,
   fileName: (req, file) => {
     return `${Date.now()}${path.extname(file.originalname)}`;
   },

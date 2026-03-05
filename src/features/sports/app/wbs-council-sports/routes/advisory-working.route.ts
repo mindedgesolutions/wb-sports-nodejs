@@ -5,13 +5,14 @@ import { wbsCouncilMemberSchema } from '../schemas';
 import { uploadSingle } from '@/globals/middlewares/upload.single';
 import path from 'path';
 import { ROOT_PATH } from '@/globals/constants';
+import { fileSizes, fileTypes } from '@/globals/helpers/formats.helper';
 
 const advisoryWorkingRoute = express.Router();
 
 const uploadMemberImg = uploadSingle({
   dest: path.join(ROOT_PATH, '/uploads/sports/wbs-council-members'),
-  fileSize: 2 * 1024 * 1024,
-  allowedTypes: ['image/jpeg', 'image/png'],
+  fileSize: fileSizes().max2mb,
+  allowedTypes: fileTypes().imageTypes,
   fileName: (req, file) => {
     return `${Date.now()}${path.extname(file.originalname)}`;
   },
