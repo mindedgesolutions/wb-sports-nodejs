@@ -18,7 +18,7 @@ export const validEmail = (value: string) => {
 
 // -------------------------------------
 
-export const validDate = (value: string) => {
+export const validDate = (value: string | Date) => {
   const local = new Date(value);
   const yyyy = local.getFullYear();
   const mm = String(local.getMonth() + 1).padStart(2, '0');
@@ -47,6 +47,7 @@ export const fileTypes = () => {
     'application/pdf',
     'application/msword',
     'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
   ];
 
   return { imageTypes, documentTypes };
