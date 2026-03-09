@@ -31,7 +31,7 @@ function appRoutes(app: Application) {
   app.use('/api/v1/sports/announcements/announcements', announcementsRoute);
   app.use('/api/v1/sports/announcements/advertisements', advertisementsRoute);
 
-  // File path routes -------
+  // File path routes (images only) -------
   app.use('/uploads', express.static(path.join(ROOT_PATH, 'uploads')));
 }
 

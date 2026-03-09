@@ -126,6 +126,19 @@ model SpAnnouncements {
   updatedAt         DateTime     @updatedAt
 }
 
+model SpAdvertisements {
+  id                Int          @id     @default(autoincrement())
+  title             String
+  slug              String
+  description       String?
+  filePath          String
+  fileName          String
+  adDate            DateTime?    @db.Date
+  isActive          Boolean      @default(true)
+  createdAt         DateTime     @default(now())
+  updatedAt         DateTime     @updatedAt
+}
+
 enum Department{
   sports
   services

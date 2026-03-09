@@ -1,5 +1,4 @@
 import express from 'express';
-import { announcementsController } from '../controllers/announcements.controller';
 import path from 'path';
 import { ROOT_PATH } from '@/globals/constants';
 import { fileSizes, fileTypes } from '@/globals/helpers/formats.helper';

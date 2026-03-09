@@ -10,3 +10,11 @@ export interface AnnouncementDTO {
   filePath: string | null;
   fileName: string | null;
 }
+
+// -----------------------------
+
+export interface AdvertisementDTO {
+  title: string;
+  description: string | null;
+  adDate: Date | null;
+}
