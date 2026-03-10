@@ -3,6 +3,7 @@ import { validDate } from '@/globals/helpers/formats.helper';
 import { getPaginationAndFilters } from '@/globals/helpers/simple.pagination.helper';
 import generateSlug from '@/globals/helpers/slug.helper';
 import { prisma } from '@/prisma';
+import { PlayerAchievementsDTO } from '../interfaces';
 
 class PlayerAchievementsService {
   public async checkExists(name: string, id?: number) {
@@ -23,7 +24,7 @@ class PlayerAchievementsService {
 
   // ---------------------------
 
-  public async add(requestBody: any) {
+  public async add(requestBody: PlayerAchievementsDTO) {
     const { sport, name, description, achievementDate } = requestBody;
 
     const exists = await this.checkExists(name as string);
@@ -66,7 +67,13 @@ class PlayerAchievementsService {
 
   // ---------------------------
 
-  public async update({ id, requestBody }: { id: number; requestBody: any }) {
+  public async update({
+    id,
+    requestBody,
+  }: {
+    id: number;
+    requestBody: PlayerAchievementsDTO;
+  }) {
     const { sport, name, description, achievementDate } = requestBody;
 
     const exists = await this.checkExists(name as string, id);

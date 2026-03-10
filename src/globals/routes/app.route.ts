@@ -13,6 +13,7 @@ import advisoryWorkingRoute from '@/features/sports/app/wbs-council-sports/route
 import announcementsRoute from '@/features/sports/app/announcements/routes/announcements.route';
 import advertisementsRoute from '@/features/sports/app/announcements/routes/advertisements.route';
 import playerAchievementsRoute from '@/features/sports/app/achievements-awards/routes/player-achievements.route';
+import awardsRoute from '@/features/sports/app/achievements-awards/routes/awards.route';
 
 function appRoutes(app: Application) {
   app.use('/api/v1/auth', authRoute);
@@ -35,6 +36,7 @@ function appRoutes(app: Application) {
     '/api/v1/sports/achievements-awards/player-achievements',
     playerAchievementsRoute,
   );
+  app.use('/api/v1/sports/achievements-awards/awards', awardsRoute);
 
   // File path routes (images only) -------
   app.use('/uploads', express.static(path.join(ROOT_PATH, 'uploads')));

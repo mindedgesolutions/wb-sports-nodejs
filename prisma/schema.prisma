@@ -151,6 +151,17 @@ model SpPlayersAchievements{
   updatedAt         DateTime     @updatedAt
 }
 
+model SpAwards{
+  id                Int          @id     @default(autoincrement())
+  name              String       @db.VarChar(255)
+  slug              String       @db.VarChar(255)
+  filePath          String
+  fileName          String
+  isActive          Boolean      @default(true)
+  createdAt         DateTime     @default(now())
+  updatedAt         DateTime     @updatedAt
+}
+
 enum Department{
   sports
   services
