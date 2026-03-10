@@ -139,6 +139,18 @@ model SpAdvertisements {
   updatedAt         DateTime     @updatedAt
 }
 
+model SpPlayersAchievements{
+  id                Int          @id     @default(autoincrement())
+  sport             String       @db.VarChar(255)
+  name              String       @db.VarChar(255)
+  slug              String       @db.VarChar(255)
+  description       String
+  achievementDate   DateTime?    @db.Date
+  isActive          Boolean      @default(true)
+  createdAt         DateTime     @default(now())
+  updatedAt         DateTime     @updatedAt
+}
+
 enum Department{
   sports
   services
