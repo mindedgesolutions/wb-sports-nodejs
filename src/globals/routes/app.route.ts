@@ -14,6 +14,7 @@ import announcementsRoute from '@/features/sports/app/announcements/routes/annou
 import advertisementsRoute from '@/features/sports/app/announcements/routes/advertisements.route';
 import playerAchievementsRoute from '@/features/sports/app/achievements-awards/routes/player-achievements.route';
 import awardsRoute from '@/features/sports/app/achievements-awards/routes/awards.route';
+import stadiumsRoute from '@/features/sports/app/information-about/routes/stadiums.route';
 
 function appRoutes(app: Application) {
   app.use('/api/v1/auth', authRoute);
@@ -37,6 +38,7 @@ function appRoutes(app: Application) {
     playerAchievementsRoute,
   );
   app.use('/api/v1/sports/achievements-awards/awards', awardsRoute);
+  app.use('/api/v1/sports/information-about/stadiums', stadiumsRoute);
 
   // File path routes (images only) -------
   app.use('/uploads', express.static(path.join(ROOT_PATH, 'uploads')));

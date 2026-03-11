@@ -162,6 +162,37 @@ model SpAwards{
   updatedAt         DateTime     @updatedAt
 }
 
+model SpStadiums{
+  id                Int           @id     @default(autoincrement())
+  name              String        @db.VarChar(255)
+  slug              String        @db.VarChar(255)
+  location          String?       @db.VarChar(255)
+  address           String?
+  coverPhoto        String?
+  isActive          Boolean       @default(true)
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
+  highLights        SpStadiumHighlights[]
+  stadiumImages     SpStadiumImages[]
+}
+
+model SpStadiumHighlights{
+  id                Int           @id     @default(autoincrement())
+  stadiumId         Int
+  stadium           SpStadiums    @relation(fields: [stadiumId], references: [id])   
+  description       String
+  isActive          Boolean       @default(true)
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
+}
+
+model SpStadiumImages{
+  id                Int           @id     @default(autoincrement())
+  stadiumId         Int
+  stadium           SpStadiums    @relation(fields: [stadiumId], references: [id])   
+  imagePath         String
+}
+
 enum Department{
   sports
   services
