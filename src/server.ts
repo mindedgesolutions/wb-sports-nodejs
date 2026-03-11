@@ -73,10 +73,6 @@ class Server {
   // ---------------------------
 
   private listenServer() {
-    // this.app.listen(PORT, () => {
-    //   console.log(`Server started on port ${PORT}`);
-    // });
-
     const server = http.createServer(this.app);
 
     initSocket(server);
