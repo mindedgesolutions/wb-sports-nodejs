@@ -2,6 +2,7 @@ import { prisma } from '@/prisma';
 import { AchievementsDTO } from '../interfaces';
 import { getPaginationAndFilters } from '@/globals/helpers/simple.pagination.helper';
 import { validDate } from '@/globals/helpers/formats.helper';
+import { getIO } from '@/socket.io';
 
 class AchievementsService {
   public async create(requestBody: AchievementsDTO) {
@@ -11,6 +12,8 @@ class AchievementsService {
     const data = await prisma.spAchievements.create({
       data: { title, description, achievementDate: formattedDate },
     });
+
+    getIO().emit('achievementCreated', data);
 
     return data;
   }
@@ -47,15 +50,19 @@ class AchievementsService {
       data: { title, description, achievementDate: formattedDate },
     });
 
+    getIO().emit('achievementUpdated', data);
+
     return data;
   }
 
   // ----------------------
 
   public async delete(id: number) {
-    await prisma.spAchievements.delete({
+    const data = await prisma.spAchievements.delete({
       where: { id },
     });
+
+    getIO().emit('achievementDeleted', data);
 
     return;
   }
@@ -67,6 +74,8 @@ class AchievementsService {
       where: { id },
       data: { isActive: active },
     });
+
+    getIO().emit('achievementToggled', data);
 
     return data;
   }

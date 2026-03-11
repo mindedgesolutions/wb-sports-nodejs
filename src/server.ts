@@ -6,6 +6,8 @@ import cookieParser from 'cookie-parser';
 import { logger } from '@/globals/logs/logger';
 import { PORT } from './globals/constants';
 import cors from 'cors';
+import http from 'http';
+import { initSocket } from './socket.io';
 
 class Server {
   private app: Application;
@@ -71,7 +73,15 @@ class Server {
   // ---------------------------
 
   private listenServer() {
-    this.app.listen(PORT, () => {
+    // this.app.listen(PORT, () => {
+    //   console.log(`Server started on port ${PORT}`);
+    // });
+
+    const server = http.createServer(this.app);
+
+    initSocket(server);
+
+    server.listen(PORT, () => {
       console.log(`Server started on port ${PORT}`);
     });
   }

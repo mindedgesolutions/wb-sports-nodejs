@@ -19,4 +19,5 @@ export const REFRESH_TOKEN_EXPIRES_IN = getEnv(
   'REFRESH_TOKEN_EXPIRES_IN',
   '7d',
 );
+export const FRONTEND_URL = getEnv('FRONTEND_URL');
 export const ROOT_PATH = path.resolve(process.cwd());
