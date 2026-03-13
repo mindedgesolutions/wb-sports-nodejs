@@ -4,7 +4,18 @@ import { StatusCodes } from 'http-status-codes';
 
 class StadiumController {
   public async add(req: Request, res: Response) {
-    const data = await stadiumService.add(req.body);
+    const files = req.files as {
+      newImg?: Express.Multer.File[];
+      newGalleryImg?: Express.Multer.File[];
+    };
+
+    const cover = files.newImg?.[0];
+    const gallery = files.newGalleryImg || [];
+    const data = await stadiumService.add({
+      requestBody: req.body,
+      cover: cover as Express.Multer.File,
+      gallery: gallery as Express.Multer.File[],
+    });
     return res.status(StatusCodes.CREATED).json({ message: 'Success', data });
   }
 
