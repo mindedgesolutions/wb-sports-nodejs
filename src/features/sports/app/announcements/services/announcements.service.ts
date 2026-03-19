@@ -8,6 +8,7 @@ import fs from 'fs/promises';
 import { validDate } from '@/globals/helpers/formats.helper';
 import { BadRequestException } from '@/globals/core/error.core';
 import { AnnouncementDTO } from '../interfaces';
+import { getIO } from '@/socket.io';
 
 class AnnouncementsService {
   public async checkExist(annNo: string, id?: number) {
@@ -65,6 +66,8 @@ class AnnouncementsService {
           filePath: file.filename,
         },
       });
+
+      getIO().emit('annAnnouncementCreated', data);
 
       return data;
     } catch (error) {
@@ -163,6 +166,8 @@ class AnnouncementsService {
         },
       });
 
+      getIO().emit('annAnnouncementUpdated', { id });
+
       return data;
     } catch (error) {
       if (file?.path) {
@@ -187,6 +192,9 @@ class AnnouncementsService {
     }
 
     await prisma.spAnnouncements.delete({ where: { id } });
+
+    getIO().emit('annAnnouncementDeleted', { id });
+
     return;
   }
 
@@ -197,6 +205,8 @@ class AnnouncementsService {
       where: { id },
       data: { isActive: active },
     });
+
+    getIO().emit('annAnnouncementToggled', { id });
 
     return;
   }

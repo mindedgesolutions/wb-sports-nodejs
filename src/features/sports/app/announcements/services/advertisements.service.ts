@@ -7,6 +7,7 @@ import path from 'path';
 import fs from 'fs/promises';
 import { AdvertisementDTO } from '../interfaces';
 import { getPaginationAndFilters } from '@/globals/helpers/simple.pagination.helper';
+import { getIO } from '@/socket.io';
 
 class AdvertisementsService {
   public async checkExist(title: string, id?: number) {
@@ -60,6 +61,8 @@ class AdvertisementsService {
           filePath: file.filename,
         },
       });
+
+      getIO().emit('anAdvertisementCreated', data);
 
       return data;
     } catch (error) {
@@ -133,6 +136,8 @@ class AdvertisementsService {
         },
       });
 
+      getIO().emit('anAdvertisementUpdated', { id });
+
       return data;
     } catch (error) {
       if (file?.path) {
@@ -155,6 +160,8 @@ class AdvertisementsService {
     }
     await prisma.spAdvertisements.delete({ where: { id } });
 
+    getIO().emit('anAdvertisementDeleted', { id });
+
     return;
   }
 
@@ -165,6 +172,8 @@ class AdvertisementsService {
       where: { id },
       data: { isActive: checked },
     });
+
+    getIO().emit('anAdvertisementToggled', { id });
 
     return;
   }

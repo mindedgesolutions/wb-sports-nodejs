@@ -2,6 +2,7 @@ import { getPaginationAndFilters } from '@/globals/helpers/simple.pagination.hel
 import { prisma } from '@/prisma';
 import { SportsPersonnelDTO } from '../interfaces';
 import { validDate } from '@/globals/helpers/formats.helper';
+import { getIO } from '@/socket.io';
 
 class SportsPersonnelService {
   public async add(requestBody: SportsPersonnelDTO) {
@@ -18,6 +19,8 @@ class SportsPersonnelService {
         contactTwo: contactTwo || null,
       },
     });
+
+    getIO().emit('sportsPersonnelCreated', data);
 
     return data;
   }
@@ -66,6 +69,8 @@ class SportsPersonnelService {
       },
     });
 
+    getIO().emit('sportsPersonnelUpdated', { id });
+
     return data;
   }
 
@@ -73,6 +78,9 @@ class SportsPersonnelService {
 
   public async delete(id: number) {
     await prisma.spSportsPersonnel.delete({ where: { id } });
+
+    getIO().emit('sportsPersonnelDeleted', { id });
+
     return;
   }
 
@@ -83,6 +91,9 @@ class SportsPersonnelService {
       where: { id },
       data: { isActive: active },
     });
+
+    getIO().emit('sportsPersonnelToggled', { id });
+
     return data;
   }
 }

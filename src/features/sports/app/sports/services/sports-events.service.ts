@@ -2,6 +2,7 @@ import { prisma } from '@/prisma';
 import { SportsEventsDTO } from '../interfaces';
 import { getPaginationAndFilters } from '@/globals/helpers/simple.pagination.helper';
 import { validDate } from '@/globals/helpers/formats.helper';
+import { getIO } from '@/socket.io';
 
 class SportsEventsService {
   public async add(requestBody: SportsEventsDTO) {
@@ -11,6 +12,8 @@ class SportsEventsService {
     const data = await prisma.spSportsEvents.create({
       data: { title: title.trim(), startDate: formattedDate },
     });
+
+    getIO().emit('sportsEventCreated', data);
 
     return data;
   }
@@ -50,6 +53,8 @@ class SportsEventsService {
       },
     });
 
+    getIO().emit('sportsEventUpdated', { id });
+
     return data;
   }
 
@@ -57,6 +62,8 @@ class SportsEventsService {
 
   public async delete(id: number) {
     await prisma.spSportsEvents.delete({ where: { id } });
+
+    getIO().emit('sportsEventDeleted', { id });
 
     return;
   }
@@ -68,6 +75,9 @@ class SportsEventsService {
       where: { id },
       data: { isActive: active },
     });
+
+    getIO().emit('sportsEventToggled', { id });
+
     return data;
   }
 }

@@ -6,6 +6,7 @@ import fs from 'fs/promises';
 import path from 'path';
 import generateSlug from '@/globals/helpers/slug.helper';
 import { BadRequestException } from '@/globals/core/error.core';
+import { getIO } from '@/socket.io';
 
 class KeyPersonnelService {
   public async checkExist(value: string, id?: number) {
@@ -57,6 +58,9 @@ class KeyPersonnelService {
           },
         });
       });
+
+      getIO().emit('keyPersonnelCreated', data);
+
       return data;
     } catch (error) {
       if (file?.path) {
@@ -144,6 +148,8 @@ class KeyPersonnelService {
       },
     });
 
+    getIO().emit('keyPersonnelUpdated', { id });
+
     return data;
   }
 
@@ -162,6 +168,8 @@ class KeyPersonnelService {
 
     await prisma.spKeyPersonnel.delete({ where: { id } });
 
+    getIO().emit('keyPersonnelDeleted', { id });
+
     return;
   }
 
@@ -172,6 +180,9 @@ class KeyPersonnelService {
       where: { id },
       data: { isActive: active },
     });
+
+    getIO().emit('keyPersonnelToggled', { id });
+
     return;
   }
 

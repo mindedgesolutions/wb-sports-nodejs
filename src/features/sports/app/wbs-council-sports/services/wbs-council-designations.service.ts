@@ -3,11 +3,11 @@ import {
   WbsCouncilDesignationsDTO,
   WbsCouncilDesignationsShowOrderDTO,
 } from '../interfaces';
-import { getPaginationAndFilters } from '@/globals/helpers/simple.pagination.helper';
 import generateSlug from '@/globals/helpers/slug.helper';
 import { BoardTypes } from '@/generated/prisma/enums';
 import { SpWbsCouncilDesignationsWhereInput } from '@/generated/prisma/models';
 import { getMeta } from '@/globals/helpers/meta.helper';
+import { getIO } from '@/socket.io';
 
 class WbsCouncilDesignationsService {
   public async add(requestBody: WbsCouncilDesignationsDTO) {
@@ -20,6 +20,8 @@ class WbsCouncilDesignationsService {
         slug: generateSlug(name),
       },
     });
+
+    getIO().emit('wcsDesignationCreated', data);
 
     return data;
   }
@@ -87,6 +89,8 @@ class WbsCouncilDesignationsService {
       },
     });
 
+    getIO().emit('wcsDesignationUpdated', { id });
+
     return data;
   }
 
@@ -94,6 +98,8 @@ class WbsCouncilDesignationsService {
 
   public async delete(id: number) {
     await prisma.spWbsCouncilDesignations.delete({ where: { id } });
+
+    getIO().emit('wcsDesignationDeleted', { id });
 
     return;
   }
@@ -105,6 +111,9 @@ class WbsCouncilDesignationsService {
       where: { id },
       data: { isActive: active },
     });
+
+    getIO().emit('wcsDesignationToggled', { id });
+
     return data;
   }
 

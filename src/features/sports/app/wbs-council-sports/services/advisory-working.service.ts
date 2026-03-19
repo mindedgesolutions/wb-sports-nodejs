@@ -8,6 +8,7 @@ import { BoardTypes } from '@/generated/prisma/enums';
 import { WbsCouncilMemberDTO } from '../interfaces';
 import { SpAdvisoryWoringCommitteeWhereInput } from '@/generated/prisma/models';
 import { getMeta } from '@/globals/helpers/meta.helper';
+import { getIO } from '@/socket.io';
 
 class AdvisoryWorkingService {
   public async checkExist(value: string, id?: number) {
@@ -76,6 +77,9 @@ class AdvisoryWorkingService {
           },
         });
       });
+
+      getIO().emit('wcsCouncilMemberCreated', data);
+
       return data;
     } catch (error) {
       if (file?.path) {
@@ -198,6 +202,9 @@ class AdvisoryWorkingService {
           },
         });
       });
+
+      getIO().emit('wcsCouncilMemberUpdated', { id });
+
       return data;
     } catch (error) {
       if (file?.path) {
@@ -219,6 +226,9 @@ class AdvisoryWorkingService {
       await fs.unlink(path).catch(() => {});
     }
     await prisma.spAdvisoryWoringCommittee.delete({ where: { id } });
+
+    getIO().emit('wcsCouncilMemberDeleted', { id });
+
     return;
   }
 
@@ -229,6 +239,9 @@ class AdvisoryWorkingService {
       where: { id },
       data: { isActive: active },
     });
+
+    getIO().emit('wcsCouncilMemberToggled', { id });
+
     return;
   }
 }

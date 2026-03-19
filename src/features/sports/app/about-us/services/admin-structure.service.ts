@@ -3,6 +3,7 @@ import { AdminStructureDTO, AdminStructureShowOrderDTO } from '../interfaces';
 import { getPaginationAndFilters } from '@/globals/helpers/simple.pagination.helper';
 import generateSlug from '@/globals/helpers/slug.helper';
 import { BadRequestException } from '@/globals/core/error.core';
+import { getIO } from '@/socket.io';
 
 class AdminStructureService {
   public async checkExist(value: string, id?: number) {
@@ -36,6 +37,8 @@ class AdminStructureService {
     const data = await prisma.spAdminStructure.create({
       data: { name, slug: generateSlug(name) },
     });
+
+    getIO().emit('adminStructureCreated', data);
 
     return data;
   }
@@ -92,6 +95,8 @@ class AdminStructureService {
       data: { name, slug: generateSlug(name) },
     });
 
+    getIO().emit('adminStructureUpdated', data);
+
     return data;
   }
 
@@ -101,6 +106,8 @@ class AdminStructureService {
     await prisma.spAdminStructure.delete({
       where: { id },
     });
+
+    getIO().emit('adminStructureDeleted', { id });
 
     return;
   }
@@ -112,6 +119,8 @@ class AdminStructureService {
       where: { id },
       data: { isActive: active },
     });
+
+    getIO().emit('adminStructureToggled', data);
 
     return data;
   }
